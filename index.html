@@ -277,68 +277,158 @@ html,body{height:100%;background:var(--ink);color:#f0ead0;font-family:'DM Sans',
 
 /* ── SCRATCH CARD ── */
 .scratch-intro{
-  font-size:16px;color:var(--muted2);margin-bottom:16px;
-  font-weight:300;line-height:1.6;text-align:center;
+  font-size:15px;color:var(--muted2);margin-bottom:28px;
+  font-weight:300;line-height:1.7;text-align:center;
+  transition:opacity .4s var(--ease);
 }
-.scratch-grid{
-  display:grid;grid-template-columns:1fr 1fr;gap:14px;
-  margin-bottom:16px;
-}
-.sc-card{
-  aspect-ratio:unset;height:130px;
-  border-radius:14px;
-  background:var(--ink2);border:2px solid var(--border);
-  display:flex;flex-direction:column;align-items:center;justify-content:center;gap:8px;
-  cursor:pointer;position:relative;overflow:hidden;
-  transition:border-color .25s var(--spring),transform .25s var(--spring),box-shadow .25s;
-}
-.sc-card::before{
-  content:'';position:absolute;inset:0;
-  background:linear-gradient(135deg,rgba(212,175,55,0.07),transparent);
-  opacity:0;transition:opacity .2s;
-}
-.sc-card:hover::before{opacity:1}
-.sc-card:hover{transform:scale(1.03)}
-.sc-card:active{transform:scale(.97)}
-.sc-card.selected{
-  border-color:var(--gold);
-  box-shadow:0 0 0 3px rgba(212,175,55,0.2),0 12px 40px rgba(212,175,55,0.12);
-  background:linear-gradient(160deg,rgba(212,175,55,0.1),var(--ink2));
-  transform:scale(1.04);
-}
-.sc-card.idle{opacity:.45;transform:scale(.97);pointer-events:none}
-.sc-card.used{pointer-events:none}
 
+/* 2×2 centered grid */
+.scratch-grid{
+  display:grid;
+  grid-template-columns:repeat(2,148px);
+  gap:20px;
+  justify-content:center;
+  margin-bottom:28px;
+}
+
+/* Each card */
+.sc-card{
+  width:148px;height:190px;
+  border-radius:18px;
+  background:var(--ink2);
+  border:1.5px solid rgba(212,175,55,0.2);
+  display:flex;flex-direction:column;
+  align-items:center;justify-content:center;gap:10px;
+  cursor:pointer;position:relative;overflow:hidden;
+  transition:
+    border-color .4s var(--ease),
+    transform .4s var(--spring),
+    box-shadow .4s var(--ease),
+    opacity .4s var(--ease),
+    background .4s var(--ease);
+  will-change:transform;
+}
+
+/* diagonal pattern */
 .sc-back-pattern{
   position:absolute;inset:0;
-  background-image:
-    repeating-linear-gradient(45deg,rgba(212,175,55,0.04) 0,rgba(212,175,55,0.04) 1px,transparent 0,transparent 50%);
-  background-size:14px 14px;
+  background-image:repeating-linear-gradient(
+    45deg,
+    rgba(212,175,55,0.035) 0,rgba(212,175,55,0.035) 1px,
+    transparent 0,transparent 50%
+  );
+  background-size:16px 16px;
+  transition:opacity .4s;
 }
-.sc-card-num{
-  font-family:'Syne Mono',monospace;font-size:32px;
-  color:rgba(212,175,55,0.25);font-weight:700;position:relative;z-index:1;
-}
-.sc-card-icon{font-size:32px;position:relative;z-index:1;opacity:0.5}
-.sc-tap-hint{
-  font-family:'Syne',sans-serif;font-size:11px;letter-spacing:2px;
-  color:var(--gold);text-transform:uppercase;position:relative;z-index:1;
-  opacity:0;transition:opacity .3s;
-}
-.sc-card.selected .sc-tap-hint{opacity:1}
-.sc-card.selected .sc-card-num{color:var(--gold)}
-.sc-card.selected .sc-card-icon{opacity:1}
 
-/* canvas scratch area */
-.canvas-wrap{display:none;flex-direction:column;gap:10px}
-.canvas-wrap.visible{display:flex}
-.canvas-shell{border-radius:var(--r);overflow:hidden;border:1px solid var(--border);cursor:crosshair}
-#scratchCanvas{width:100%;display:block;touch-action:none}
-.progress-track{height:4px;background:var(--ink2);border-radius:3px;overflow:hidden}
-.progress-fill{height:100%;width:0%;border-radius:3px;background:linear-gradient(90deg,var(--gold),var(--gold2));transition:width .1s}
-.scratch-cta{
-  font-family:'Syne Mono',monospace;font-size:13px;
-  letter-spacing:2px;color:var(--muted2);text-align:center;
+/* shimmer sweep — plays on idle cards */
+.sc-card::after{
+  content:'';position:absolute;inset:0;
+  background:linear-gradient(
+    110deg,
+    transparent 30%,
+    rgba(212,175,55,0.07) 50%,
+    transparent 70%
+  );
+  transform:translateX(-100%);
+  animation:cardShimmer 3.2s ease-in-out infinite;
+}
+@keyframes cardShimmer{
+  0%,60%{transform:translateX(-100%)}
+  80%{transform:translateX(100%)}
+  100%{transform:translateX(100%)}
+}
+
+/* subtle idle float */
+.sc-card:not(.selected):not(.idle){
+  animation:cardFloat 4s ease-in-out infinite;
+}
+.sc-card:nth-child(1){animation-delay:0s}
+.sc-card:nth-child(2){animation-delay:.6s}
+.sc-card:nth-child(3){animation-delay:1.2s}
+.sc-card:nth-child(4){animation-delay:1.8s}
+@keyframes cardFloat{
+  0%,100%{transform:translateY(0)}
+  50%{transform:translateY(-5px)}
+}
+
+.sc-card:active{transform:scale(.95) !important;transition-duration:.15s}
+
+/* SELECTED state */
+.sc-card.selected{
+  border-color:var(--gold);
+  background:linear-gradient(160deg,rgba(212,175,55,0.11),rgba(212,175,55,0.03));
+  box-shadow:
+    0 0 0 3px rgba(212,175,55,0.15),
+    0 16px 48px rgba(212,175,55,0.18);
+  transform:scale(1.06) translateY(-4px) !important;
+  animation:selectedPulse 2s ease-in-out infinite !important;
+}
+@keyframes selectedPulse{
+  0%,100%{box-shadow:0 0 0 3px rgba(212,175,55,0.15),0 16px 48px rgba(212,175,55,0.18)}
+  50%{box-shadow:0 0 0 5px rgba(212,175,55,0.25),0 20px 56px rgba(212,175,55,0.28)}
+}
+.sc-card.selected::after{display:none}
+.sc-card.selected .sc-back-pattern{opacity:0.4}
+
+/* IDLE state (non-selected after pick) */
+.sc-card.idle{
+  opacity:.3;
+  transform:scale(.95) !important;
+  pointer-events:none;
+  animation:none !important;
+}
+.sc-card.idle::after{display:none}
+
+/* Card contents */
+.sc-card-num{
+  font-family:'Syne Mono',monospace;font-size:36px;font-weight:700;
+  color:rgba(212,175,55,0.22);
+  position:relative;z-index:1;line-height:1;
+  transition:color .4s var(--ease),transform .4s var(--spring);
+}
+.sc-card-icon{
+  font-size:30px;position:relative;z-index:1;
+  opacity:0.35;
+  transition:opacity .4s var(--ease),transform .4s var(--spring);
+}
+
+/* TAP TO REVEAL label */
+.sc-tap-hint{
+  font-family:'Syne',sans-serif;font-size:10px;letter-spacing:2.5px;
+  color:var(--gold);text-transform:uppercase;
+  position:relative;z-index:1;
+  opacity:0;
+  transform:translateY(6px);
+  transition:opacity .5s var(--ease),transform .5s var(--spring);
+}
+
+/* Animate content on selected */
+.sc-card.selected .sc-card-num{
+  color:var(--gold2);
+  transform:translateY(-3px);
+}
+.sc-card.selected .sc-card-icon{
+  opacity:1;
+  transform:scale(1.15);
+}
+.sc-card.selected .sc-tap-hint{
+  opacity:1;
+  transform:translateY(0);
+}
+
+/* canvas removed — reward shown directly on tap */
+
+
+/* card flip on tap */
+.sc-card.flipping{
+  animation:cardFlip .6s var(--spring) forwards !important;
+}
+@keyframes cardFlip{
+  0%  {transform:scale(1.06) translateY(-4px) rotateY(0deg)}
+  40% {transform:scale(1.12) translateY(-8px) rotateY(90deg)}
+  41% {transform:scale(1.12) translateY(-8px) rotateY(-90deg)}
+  100%{transform:scale(1) translateY(0) rotateY(0deg);opacity:0}
 }
 
 /* ── REWARD ── */
@@ -499,9 +589,9 @@ html,body{height:100%;background:var(--ink);color:#f0ead0;font-family:'DM Sans',
     </div>
   </div>
   <div class="inner-body">
-    <div class="scratch-intro" id="scratchIntro">Choose one card · then scratch to reveal your complimentary service</div>
+    <p class="scratch-intro" id="scratchIntro">Choose one card &amp; scratch to reveal<br>your complimentary service</p>
 
-    <!-- 4 card picker -->
+    <!-- 4 card picker — 2×2 centered -->
     <div class="scratch-grid" id="scratchGrid">
       <div class="sc-card" id="sc0" onclick="selectCard(0)">
         <div class="sc-back-pattern"></div>
@@ -529,14 +619,7 @@ html,body{height:100%;background:var(--ink);color:#f0ead0;font-family:'DM Sans',
       </div>
     </div>
 
-    <!-- scratch canvas (hidden until card selected) -->
-    <div class="canvas-wrap" id="canvasWrap">
-      <div class="canvas-shell">
-        <canvas id="scratchCanvas" width="748" height="380"></canvas>
-      </div>
-      <div class="progress-track"><div class="progress-fill" id="pFill"></div></div>
-      <div class="scratch-cta" id="scratchCta">— SCRATCH TO REVEAL —</div>
-    </div>
+    <!-- reward shown directly on tap -->
   </div>
 </div>
 
@@ -603,6 +686,18 @@ function go(id){
     if(id==='scratch')initScratch();
     cur=id;
   },140);
+}
+
+
+/* card flip on tap */
+.sc-card.flipping{
+  animation:cardFlip .6s var(--spring) forwards !important;
+}
+@keyframes cardFlip{
+  0%  {transform:scale(1.06) translateY(-4px) rotateY(0deg)}
+  40% {transform:scale(1.12) translateY(-8px) rotateY(90deg)}
+  41% {transform:scale(1.12) translateY(-8px) rotateY(-90deg)}
+  100%{transform:scale(1) translateY(0) rotateY(0deg);opacity:0}
 }
 
 /* ── REWARD ── */
@@ -714,133 +809,49 @@ function revealCards(winner){
 }
 
 /* ═══════════════════════════
-   SCRATCH
+   SCRATCH — tap to reveal instantly
 ═══════════════════════════ */
 let scratchPrizes=[];
 let selectedCard=-1;
-let sDone=false;
 let scratchInited=false;
 
 function initScratch(){
   if(scratchInited)return;
   scratchInited=true;
-  // assign one prize per card (shuffle)
   const shuffled=[...FREE_SERVICES].sort(()=>Math.random()-.5);
   scratchPrizes=shuffled.slice(0,4);
-  selectedCard=-1;sDone=false;
+  selectedCard=-1;
 }
 
 function selectCard(idx){
-  if(selectedCard!==-1)return; // already picked one
+  if(selectedCard!==-1)return;
   selectedCard=idx;
-  // highlight selected
-  document.getElementById('sc'+idx).classList.add('selected');
-  // idle the others
+  const card=document.getElementById('sc'+idx);
+
+  // idle others immediately
   for(let i=0;i<4;i++){
     if(i!==idx) document.getElementById('sc'+i).classList.add('idle');
   }
-  document.getElementById('scratchIntro').textContent='Now scratch the card to reveal your free service!';
-  // show canvas
-  const wrap=document.getElementById('canvasWrap');
-  wrap.classList.add('visible');
-  drawScratch(scratchPrizes[idx]);
-  // scroll into view
-  setTimeout(()=>wrap.scrollIntoView({behavior:'smooth',block:'nearest'}),100);
-}
 
-function drawScratch(prize){
-  const cv=document.getElementById('scratchCanvas');
-  const ctx=cv.getContext('2d');
-  const W=cv.width,H=cv.height;
-  ctx.clearRect(0,0,W,H);
+  // play selected highlight briefly, then flip & reveal
+  card.classList.add('selected');
 
-  // ── prize layer (below)
-  ctx.fillStyle='#121212';ctx.fillRect(0,0,W,H);
-  // subtle dot pattern
-  ctx.fillStyle='rgba(212,175,55,0.07)';
-  for(let y=20;y<H;y+=38)for(let x=20;x<W;x+=38){
-    ctx.beginPath();ctx.arc(x,y,4,0,Math.PI*2);ctx.fill();
-  }
-  ctx.textAlign='center';
-  // eyebrow
-  ctx.fillStyle='rgba(212,175,55,0.3)';
-  ctx.font='bold 13px Syne,sans-serif';
-  ctx.fillText('COMPLIMENTARY SERVICE',W/2,H/2-68);
-  // emoji
-  ctx.font='52px serif';
-  ctx.fillText(prize.emoji,W/2,H/2-14);
-  // prize text
-  ctx.fillStyle='#f0d060';
-  ctx.font='bold 28px Syne,sans-serif';
-  const lines=wrapStr(ctx,prize.label,W-80,28);
-  lines.forEach((l,i)=>ctx.fillText(l,W/2,H/2+32+i*38));
-
-  // ── scratch layer (on top)
-  ctx.globalCompositeOperation='source-over';
-  ctx.fillStyle='#2a2820';ctx.fillRect(0,0,W,H);
-  // crosshatch
-  ctx.strokeStyle='rgba(212,175,55,0.06)';ctx.lineWidth=1;
-  for(let x=0;x<W;x+=18){ctx.beginPath();ctx.moveTo(x,0);ctx.lineTo(x,H);ctx.stroke();}
-  for(let y=0;y<H;y+=18){ctx.beginPath();ctx.moveTo(0,y);ctx.lineTo(W,y);ctx.stroke();}
-  // label
-  ctx.fillStyle='rgba(212,175,55,0.2)';
-  ctx.font='bold 15px Syne,sans-serif';
-  ctx.fillText('✦  SCRATCH HERE  ✦',W/2,H/2-16);
-  ctx.font='12px DM Sans,sans-serif';
-  ctx.fillStyle='rgba(212,175,55,0.08)';
-  ctx.fillText('INARI BEAUTY · YOUR REWARD AWAITS',W/2,H/2+20);
-
-  // ── erase mode
-  ctx.globalCompositeOperation='destination-out';
-  let sc=false;
-  function pos(e){
-    const r=cv.getBoundingClientRect();
-    const sx=W/r.width,sy=H/r.height;
-    const src=e.touches?e.touches[0]:e;
-    return{x:(src.clientX-r.left)*sx,y:(src.clientY-r.top)*sy};
-  }
-  function erase(e){
-    if(!sc||sDone)return;e.preventDefault();
-    const p=pos(e);
-    ctx.beginPath();ctx.arc(p.x,p.y,36,0,Math.PI*2);ctx.fill();
-    const px=ctx.getImageData(0,0,W,H).data;
-    let cl=0;for(let i=3;i<px.length;i+=4)if(px[i]===0)cl++;
-    const pct=cl/(W*H);
-    document.getElementById('pFill').style.width=(pct*100)+'%';
-    document.getElementById('scratchCta').textContent=Math.round(pct*100)+'% scratched';
-    if(pct>.4&&!sDone){sDone=true;setTimeout(()=>showReward(prize),320);}
-  }
-  cv.addEventListener('mousedown',e=>{sc=true;erase(e)});
-  cv.addEventListener('mouseup',()=>sc=false);
-  cv.addEventListener('mousemove',erase);
-  cv.addEventListener('touchstart',e=>{sc=true;erase(e)},{passive:false});
-  cv.addEventListener('touchend',()=>sc=false);
-  cv.addEventListener('touchmove',erase,{passive:false});
+  // after short highlight pause — flip the card open
+  setTimeout(()=>{
+    card.classList.add('flipping');
+    // show reward after flip animation (600ms)
+    setTimeout(()=> showReward(scratchPrizes[idx]), 600);
+  }, 500);
 }
 
 function resetScratch(){
-  scratchInited=false;selectedCard=-1;sDone=false;
-  document.getElementById('pFill').style.width='0%';
-  document.getElementById('scratchCta').textContent='— SCRATCH TO REVEAL —';
-  document.getElementById('scratchIntro').textContent='Choose one card · then scratch to reveal your complimentary service';
-  document.getElementById('canvasWrap').classList.remove('visible');
-  const cv=document.getElementById('scratchCanvas');
-  cv.getContext('2d').clearRect(0,0,cv.width,cv.height);
+  scratchInited=false;selectedCard=-1;
+  document.getElementById('scratchIntro').textContent='Choose one card & scratch to reveal your complimentary service';
   for(let i=0;i<4;i++){
     const c=document.getElementById('sc'+i);
-    c.classList.remove('selected','idle','used');
+    c.classList.remove('selected','idle','flipping');
   }
   initScratch();
-}
-
-function wrapStr(ctx,txt,maxW,sz){
-  ctx.font='bold '+sz+'px Syne,sans-serif';
-  const words=txt.split(' '),lines=[];let line='';
-  for(const w of words){
-    const t=line?line+' '+w:w;
-    if(ctx.measureText(t).width>maxW&&line){lines.push(line);line=w;}else line=t;
-  }
-  if(line)lines.push(line);return lines;
 }
 
 /* ── BOOT ── */
