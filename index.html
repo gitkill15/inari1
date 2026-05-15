@@ -64,20 +64,62 @@ html,body{height:100%;background:var(--ink);color:#f0ead0;font-family:'DM Sans',
 
 /* ── MENU ── */
 #pg-menu{justify-content:flex-start}
-.menu-body{width:100%;max-width:480px;padding:22px 20px 28px;display:flex;flex-direction:column;gap:0;flex:1}
+.menu-body{
+  width:100%;max-width:480px;
+  min-height:100vh;min-height:100dvh;
+  padding:0 20px 40px;
+  display:flex;flex-direction:column;
+  justify-content:flex-start;
+}
 
+/* centered hero block */
+.menu-hero{
+  display:flex;flex-direction:column;align-items:center;
+  text-align:center;
+  padding-top:48px;
+  flex-shrink:0;
+}
+.menu-logo{
+  width:100px;height:100px;border-radius:50%;
+  object-fit:cover;
+  border:2px solid var(--gold);
+  box-shadow:0 0 28px rgba(212,175,55,0.3);
+  margin-bottom:14px;
+}
+.menu-brand{
+  font-family:'Syne',sans-serif;font-weight:800;
+  font-size:20px;letter-spacing:4px;
+  color:var(--gold2);text-transform:uppercase;
+  margin-bottom:6px;
+}
+.menu-tag{
+  font-size:11px;letter-spacing:3px;color:var(--muted);
+  margin-bottom:28px;
+}
 .menu-headline{
   font-family:'Syne',sans-serif;font-weight:800;
-  font-size:clamp(42px,12vw,58px);line-height:.88;
-  letter-spacing:-2px;margin-bottom:10px;
+  font-size:clamp(44px,13vw,62px);line-height:.9;
+  letter-spacing:-2px;margin-bottom:12px;
 }
 .menu-headline em{color:var(--gold);font-style:normal}
-.menu-sub{font-size:16px;color:var(--muted2);font-weight:300;margin-bottom:28px;line-height:1.6}
+.menu-sub{font-size:15px;color:var(--muted2);font-weight:300;line-height:1.7}
+
+/* tiles block at bottom */
+.menu-tiles{
+  display:flex;flex-direction:column;
+  gap:0;
+  margin-top:32px;
+}
+.tile-spacer{
+  height:1px;
+  background:linear-gradient(90deg,transparent,rgba(212,175,55,0.18),transparent);
+  margin:18px 0;
+}
 
 .game-tile{
-  border-radius:var(--r);padding:22px 20px;
+  border-radius:var(--r);padding:24px 20px;
   display:flex;align-items:center;gap:18px;
-  cursor:pointer;margin-bottom:14px;
+  cursor:pointer;
   transition:transform .25s var(--spring),box-shadow .25s,background .2s;
   position:relative;overflow:hidden;
   background:var(--ink2);border:1px solid var(--border);
@@ -378,34 +420,38 @@ html,body{height:100%;background:var(--ink);color:#f0ead0;font-family:'DM Sans',
 
 <!-- ═══ MENU ═══ -->
 <div id="pg-menu" class="page active">
-  <div class="site-header">
-    <img class="hdr-logo" id="hdrLogo1" src="" alt="Inari">
-    <div>
-      <div class="hdr-name">Inari Beauty</div>
-    </div>
-    <div class="hdr-right">
-      <div class="hdr-tag">TRY YOUR<br>LUCK ✦</div>
-    </div>
-  </div>
   <div class="menu-body">
-    <div class="menu-headline">Win a<br><em>Prize.</em></div>
-    <div class="menu-sub">Pick a game · Win a reward<br>Redeem at the counter today</div>
-    <div class="game-tile" onclick="go('dice')">
-      <div class="tile-icon">🎲</div>
-      <div class="tile-text">
-        <div class="tile-name">DICE ROLLER</div>
-        <div class="tile-desc">Roll the die · reveal your discount card</div>
-      </div>
-      <div class="tile-arr">›</div>
+
+    <!-- centered hero -->
+    <div class="menu-hero">
+      <img class="menu-logo" id="hdrLogo1" src="" alt="Inari">
+      <div class="menu-brand">Inari Beauty</div>
+      <div class="menu-tag">✦ TRY YOUR LUCK ✦</div>
+      <div class="menu-headline">Win a <em>Prize.</em></div>
+      <div class="menu-sub">Pick a game · win a reward<br>Redeem at the salon counter today</div>
     </div>
-    <div class="game-tile" onclick="go('scratch')">
-      <div class="tile-icon">🎟</div>
-      <div class="tile-text">
-        <div class="tile-name">SCRATCH CARD</div>
-        <div class="tile-desc">Pick a card · scratch to reveal a free service</div>
+
+    <!-- game tiles -->
+    <div class="menu-tiles">
+      <div class="game-tile" onclick="go('dice')">
+        <div class="tile-icon">🎲</div>
+        <div class="tile-text">
+          <div class="tile-name">DICE ROLLER</div>
+          <div class="tile-desc">Roll the die · reveal your discount card</div>
+        </div>
+        <div class="tile-arr">›</div>
       </div>
-      <div class="tile-arr">›</div>
+      <div class="tile-spacer"></div>
+      <div class="game-tile" onclick="go('scratch')">
+        <div class="tile-icon">🎟</div>
+        <div class="tile-text">
+          <div class="tile-name">SCRATCH CARD</div>
+          <div class="tile-desc">Pick a card · scratch to reveal a free service</div>
+        </div>
+        <div class="tile-arr">›</div>
+      </div>
     </div>
+
   </div>
 </div>
 
