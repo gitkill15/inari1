@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1">
-<title>INARI BEAUTY · Try Your Luck</title>
+<title>INARI BEAUTY SALON · Try Your Luck</title>
 <link href="https://fonts.googleapis.com/css2?family=Syne:wght@600;700;800&family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;1,9..40,300&family=Syne+Mono&display=swap" rel="stylesheet">
 <style>
 :root{
@@ -504,6 +504,17 @@ html,body{height:100%;background:var(--ink);color:#f0ead0;font-family:'DM Sans',
   80%{opacity:.8}
   100%{transform:translateY(110vh) rotate(800deg) scale(.4);opacity:0}
 }
+
+/* card flip on tap */
+.sc-card.flipping{
+  animation:cardFlip .6s var(--spring) forwards !important;
+}
+@keyframes cardFlip{
+  0%  {transform:scale(1.06) translateY(-4px) rotateY(0deg)}
+  40% {transform:scale(1.12) translateY(-8px) rotateY(90deg)}
+  41% {transform:scale(1.12) translateY(-8px) rotateY(-90deg)}
+  100%{transform:scale(1) translateY(0) rotateY(0deg);opacity:0}
+}
 </style>
 </head>
 <body>
@@ -515,7 +526,7 @@ html,body{height:100%;background:var(--ink);color:#f0ead0;font-family:'DM Sans',
     <!-- centered hero -->
     <div class="menu-hero">
       <img class="menu-logo" id="hdrLogo1" src="" alt="Inari">
-      <div class="menu-brand">Inari Beauty</div>
+      <div class="menu-brand">INARI BEAUTY SALON</div>
       <div class="menu-tag">✦ TRY YOUR LUCK ✦</div>
       <div class="menu-headline">Win a <em>Prize.</em></div>
       <div class="menu-sub">Pick a game · win a reward<br>Redeem at the salon counter today</div>
@@ -549,7 +560,7 @@ html,body{height:100%;background:var(--ink);color:#f0ead0;font-family:'DM Sans',
 <div id="pg-dice" class="page">
   <div class="site-header">
     <img class="hdr-logo" id="hdrLogo2" src="" alt="Inari">
-    <div><div class="hdr-name">Inari Beauty</div></div>
+    <div><div class="hdr-name">INARI BEAUTY SALON </div></div>
     <div class="hdr-right"><div class="hdr-tag">DICE<br>ROLLER</div></div>
   </div>
   <div class="inner-header">
@@ -576,7 +587,7 @@ html,body{height:100%;background:var(--ink);color:#f0ead0;font-family:'DM Sans',
 <div id="pg-scratch" class="page">
   <div class="site-header">
     <img class="hdr-logo" id="hdrLogo3" src="" alt="Inari">
-    <div><div class="hdr-name">Inari Beauty</div></div>
+    <div><div class="hdr-name">INARI BEAUTY SALON </div></div>
     <div class="hdr-right"><div class="hdr-tag">SCRATCH<br>CARD</div></div>
   </div>
   <div class="inner-header">
@@ -645,16 +656,16 @@ const DISCOUNTS=[
   {label:"10% OFF ANY SERVICE",    emoji:"✂️"},
   {label:"₹200 OFF ABOVE ₹1500",  emoji:"💰"},
   {label:"15% OFF HAIR SERVICES",  emoji:"💇‍♀️"},
-  {label:"FREE ADD-ON TREATMENT",  emoji:"🌿"},
+  {label:"HAIRCUT AT ₹399 ",  emoji:"🌿"},
   {label:"₹300 OFF ABOVE ₹2000",  emoji:"🎁"},
-  {label:"20% OFF ON WEEKDAYS",    emoji:"📅"},
+  {label:"₹500 OFF ABOVE ₹3000",    emoji:"📅"},
 ];
 
 const FREE_SERVICES=[
   {label:"FREE HEAD MASSAGE",         emoji:"💆‍♀️"},
   {label:"FREE EYEBROW THREADING",    emoji:"✨"},
   {label:"FREE HAIR WASH & BLOW DRY", emoji:"🌬️"},
-  {label:"FREE SCALP TREATMENT",      emoji:"🌿"},
+  {label:"FREE HANDS DE-TAN",      emoji:"🌿"},
 ];
 
 const PIPS={
@@ -688,17 +699,6 @@ function go(id){
   },140);
 }
 
-
-/* card flip on tap */
-.sc-card.flipping{
-  animation:cardFlip .6s var(--spring) forwards !important;
-}
-@keyframes cardFlip{
-  0%  {transform:scale(1.06) translateY(-4px) rotateY(0deg)}
-  40% {transform:scale(1.12) translateY(-8px) rotateY(90deg)}
-  41% {transform:scale(1.12) translateY(-8px) rotateY(-90deg)}
-  100%{transform:scale(1) translateY(0) rotateY(0deg);opacity:0}
-}
 
 /* ── REWARD ── */
 function showReward(p){
